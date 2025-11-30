@@ -59,7 +59,6 @@ a {
 .l-main {
   max-width: 112rem; /* 1120px */
   margin: 0 auto;
-  padding: 0 2rem 8rem;
 }
 
 .l-section {
@@ -164,6 +163,10 @@ a {
   width: 2.6rem;
   height: 2.6rem;
 }
+/* PCでは非表示 */
+.site-header__burger {
+  display: none;
+}
 
 /**************************************************
  * Hero (Home)
@@ -171,7 +174,6 @@ a {
 
 .hero {
   margin-top: 0;
-  padding-top: 0.8rem;
 }
 
 .hero__image {
@@ -205,10 +207,15 @@ a {
 }
 
 .copy__panel {
-  background-color: var(--color-bg-base);
+  background: rgba(255, 255, 255, 1);  
+  backdrop-filter: blur(6px);             
+  -webkit-backdrop-filter: blur(6px);    
   padding: 5rem 3rem;
-  border-radius: 0.4rem;
+  border-radius: 1.2rem;                  
+  border: 0.1rem solid rgba(255, 255, 255, 0.4); 
+  box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.05);  
 }
+
 
 .copy__title {
   margin: 0 0 2.4rem;
@@ -222,23 +229,26 @@ a {
   line-height: 1.8;
 }
 
+.br {
+  display: none;
+}
+
 /**************************************************
  * Note section
  **************************************************/
 
 .note {
-  background-color: var(--color-bg-soft);
-  padding: 4rem 0 0;
+  background-color: #F6F8F4; /* 薄い背景（しんゆり会計専用） */
 }
 
 .note__inner {
   max-width: 110rem;
   margin: 0 auto;
-  padding: 0 2rem 4rem;
+  padding: 4rem 2rem 4.8rem;
 }
 
 .note__header {
-  margin-bottom: 2.4rem;
+  margin-bottom: 2.8rem;
 }
 
 .note__label {
@@ -247,47 +257,128 @@ a {
 
 .note__lead {
   margin: 0;
+  color: #2F3E37;
 }
 
-/* カード一覧 */
+/* カード一覧（PC基本レイアウト：3列） */
 .note__list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2.4rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3.2rem;
 }
 
+/* NOTEカード本体 */
 .note-card {
-  background-color: var(--color-bg-base);
-  padding: 2.4rem 2rem 4rem;
-  border: 0.1rem solid transparent;
+  background: #ffffff;
+  border-radius: 2rem;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.05),
+    0 2px 4px rgba(0, 0, 0, 0.03);
+  border: 1px solid #E4ECE3;
+  padding: 2.8rem 2.4rem 2.4rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+}
+
+.note-card__link {
   display: flex;
   flex-direction: column;
+  gap: 1.6rem;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
 }
 
-.note-card__date {
-  margin: 0 0 1.2rem;
-  font-size: var(--fs-small);
+/* カード上部：日付タグ + NEWバッジ */
+.note-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
 }
 
+/* 日付タグ */
+.note-card__date-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #E5EFE9;
+  color: #1E4638;
+  padding: 0.4rem 1rem;
+  border-radius: 0.8rem;
+  font-size: 1.2rem;
+}
+
+.note-card__date-icon {
+  font-size: 1.3rem;
+}
+
+/* NEWバッジ（基本は非表示。--new が付いたときだけ表示） */
+.note-card__badge {
+  display: none;
+  padding: 0.2rem 0.8rem;
+  font-size: 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.note-card__badge--new {
+  display: inline-block;
+  background: #1E4638;
+  color: #ffffff;
+}
+
+/* タイトル */
 .note-card__title {
-  margin: 0 0 1.6rem;
-  font-size: 1.8rem;
-  font-family: var(--font-ja-base);
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.5;
+  color: #1E4638; /* 濃い緑（ブランドカラー） */
+  font-family: "Noto Serif JP", var(--font-ja-base, system-ui);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;      /* 2行まで */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* リード文（説明文） */
 .note-card__excerpt {
   margin: 0;
   font-size: 1.4rem;
+  color: #2F3E37;
   line-height: 1.7;
+  max-height: 3.4em; /* だいたい2行分 */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* 下部の芝生 */
+/* 続きを読むリンク */
+.note-card__more {
+  margin-top: auto;
+  font-size: 1.3rem;
+  color: #1E4638;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ホバー演出（PCメイン） */
+.note-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* 下部の芝生（既存仕様） */
 .note__grass {
   height: 8rem;
-  background-image: url("img/grass.jpg");
+  background-image: url("img/kusa.png");
   background-size: cover;
   background-position: center top;
 }
+
 
 /**************************************************
  * Services section
@@ -296,7 +387,7 @@ a {
 .services {
   position: relative;
   background-color: var(--color-bg-soft);
-  padding: 6rem 0 10rem;
+  padding: 4rem 0 10rem;
   overflow: hidden;
 }
 
@@ -384,7 +475,7 @@ a {
       rgba(255, 255, 255, 0.8) 50%,
       rgba(255, 255, 255, 0.0) 70%
     ),
-    url("img/office.jpg");
+    url("img/office.jpeg");
   background-size: cover;
   background-position: center right;
   background-repeat: no-repeat;
@@ -554,62 +645,205 @@ a {
   margin: 0;
   font-size: 1.2rem;
 }
-
 /**************************************************
  * Responsive
  **************************************************/
 @media (max-width: 60rem) { /* 600px以下：スマホ */
 
+  /* ヘッダー縦並び */
   .site-header__inner {
+    flex-direction: row;       
+    align-items: center;        
+    justify-content: space-between; /* 左：ロゴ ／ 右：ハンバーガー */
+  }
+
+  /* ハンバーガーボタン */
+  .site-header__burger {
+    display: inline-flex;
     flex-direction: column;
-    align-items: flex-start;
+    justify-content: center;
+    width: 3.6rem;
+    height: 3.6rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    gap: 0.6rem;
+  }
+
+  .site-header__burger span {
+    width: 100%;
+    height: 0.3rem;
+    background-color: var(--color-text-main);
+    border-radius: 0.3rem;
+    transition: 0.35s ease;
+  }
+
+  /* active状態（クロスになる） */
+  .site-header__burger.active span:nth-child(1) {
+    transform: translateY(1rem) rotate(-45deg);
+  }
+  .site-header__burger.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .site-header__burger.active span:nth-child(3) {
+    transform: translateY(-1rem) rotate(45deg);
+  }
+
+  /* ドロワーメニュー本体 */
+  .site-header__nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 28rem;
+    height: 100%;
+    background-color: #ffffff;
+    box-shadow: -0.2rem 0 1.2rem rgba(0,0,0,0.15);
+    padding: 6rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    transition: right 0.35s ease;
+    z-index: 1001;
+  }
+
+  .burger {
+    margin-left: auto;   /* 右端に寄せる */
+  }
+
+  /* activeで表示 */
+  .site-header__nav.active {
+    display: block;
+  }
+
+  /* ナビのリスト縦並び */
+  .site-header__nav-list {
+    flex-direction: column;
+    gap: 2.4rem;
+  }
+
+  /* オーバーレイ（背景暗くなる） */
+  .site-header__overlay {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.35s ease;
+    z-index: 1000;
+  }
+
+  .site-header__overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* SNSアイコンはメニュー下に入れる */
+  .site-header__sns {
+    margin-top: auto;
+  }
+
+  /* PCの横並びをキャンセル */
+  .site-header__nav {
+    display: none;
+  }
+
+  /* =========================
+   * note：1列レイアウト（スマホ）
+   * ======================= */
+
+  .note__inner {
+    padding: 3.2rem 1.6rem 4rem;
   }
 
   .note__list {
     grid-template-columns: 1fr;
+    gap: 1.6rem;
   }
 
-  /* ★ スマホでも最低2つ横並びにする */
-  .service-card {
-    /* 2列になるように幅を半分 - 余白分 */
-    flex: 0 1 calc(50% - 1.6rem);
-    width: auto;
-    padding: 1rem 0.5rem;
+  .note-card {
+    padding: 2rem 1.6rem 2.8rem;
+    border-radius: 1.6rem;
   }
+
+  .note-card__title {
+    font-size: 1.8rem;
+  }
+
+  .note-card__excerpt {
+    font-size: 1.3rem;
+  }
+
+  .note-card__more {
+    font-size: 1.2rem;
+  }
+
+  /* services：カードは2列・中央寄せ */
   .services__grid {
     gap: 1.6rem;
   }
 
+  .service-card {
+    flex: 0 1 calc(50% - 1.6rem); /* 2列になるように幅調整 */
+    width: auto;
+    max-width: none;
+    padding: 1rem 0.5rem;          /* スマホ時は少しコンパクトに */
+  }
+
+  /* 銅像のサイズ＆位置（右下寄せ） */
+  .services__statue {
+    width: 14rem;
+    right: 0;
+    bottom: -2rem;
+  }
+
+  /* About：スマホは背景画像＋白レイヤーで薄く表示 */
   .about {
+    position: relative;
     height: auto;
-    background-image:
-      linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.98) 0%,
-        rgba(255, 255, 255, 0.9) 45%,
-        rgba(255, 255, 255, 0.0) 100%
-      ),
-      url("img/office.jpg");
+    background-image: url("img/office.jpeg");  
+    background-size: cover;
+    background-position: left -90px center;
+    background-repeat: no-repeat;
+  }
+
+  /* 背景写真を薄くするレイヤー（SP限定） */
+  .about::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 1;
+  }
+
+  /* テキストはレイヤーより前面へ */
+  .about__overlay,
+  .about__inner {
+    position: relative;
+    z-index: 2;
   }
 
   .about__inner {
+    width: 100%;
     max-width: none;
     padding: 3.2rem 2rem 4rem;
   }
 
+  /* Info：1カラム＋地図少し高め */
   .info__inner {
     grid-template-columns: 1fr;
   }
 
   .info__map {
-    height: 28rem;
+    height: 32rem;
     border-left: none;
     border-top: 0.1rem solid #d6d6d6;
   }
 
-  .services__statue {
-    width: 16rem;
-  }
+  /* Copy セクション（キャッチコピー） */
   .copy {
     padding: 4rem 0 5rem;
   }
@@ -640,4 +874,16 @@ a {
     font-size: 1.5rem;
     line-height: 1.8;
   }
+
+  .br {
+    display: block;
+    height: 0;
+  }
+
+  /* 英語タイトル共通（note / services / About など） */
+  .heading-en {
+    font-size: 2.4rem;
+    line-height: 1.3;
+  }
+
 }

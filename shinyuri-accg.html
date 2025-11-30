@@ -71,103 +71,91 @@
   </h1>
 
   <!-- ================= ヘッダー ================= -->
-  <header class="site-header">
+<header class="site-header" role="banner">
   <div class="site-header__inner">
 
-    <!-- ロゴ -->
+    <!-- Logo -->
     <div class="site-header__logo">
       しんゆり会計 ｜ 岡野直純税理士事務所
     </div>
 
-    <!-- ナビゲーション -->
-    <nav class="site-header__nav" aria-label="メインナビゲーション">
+    <!-- ハンバーガーボタン（SPのみ） -->
+    <button class="site-header__burger" id="burgerBtn" aria-label="メニューを開く/閉じる">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- ナビゲーション（SPではドロワーになる） -->
+    <nav class="site-header__nav" id="globalNav">
       <ul class="site-header__nav-list">
         <li><a href="#note" class="site-header__nav-link">Note</a></li>
         <li><a href="#services" class="site-header__nav-link">Services</a></li>
         <li><a href="#about" class="site-header__nav-link">About us</a></li>
-        <li><a href="#contact" class="site-header__nav-link">Contact</a></li>
+        <li><a href="#info" class="site-header__nav-link">Info</a></li>
       </ul>
 
-      <!-- SNSアイコン -->
-      <a href="https://instagram.com"
-         class="site-header__sns-link"
-         aria-label="Instagram公式アカウント">
-        <img src="img/icon/Instagram.png" 
-             alt="Instagramアイコン" 
-             class="site-header__sns-icon">
+      <a href="https://instagram.com" class="site-header__sns" aria-label="Instagram">
+        <img src="img/icon/Instagram.png" alt="" class="site-header__sns-icon">
       </a>
     </nav>
 
   </div>
-</header>
 
+  <!-- 背景の暗幕 -->
+  <div class="site-header__overlay" id="navOverlay"></div>
+</header>
 
   <main class="l-main">
     <!-- ============== メインビジュアル ============== -->
     <section class="hero" aria-label="新百合ヶ丘の風景">
-      <img class="hero__image" src="img/shinyuri-hero.jpg" alt="新百合ヶ丘の街並みの写真">
+      <img class="hero__image" src="img/shinyuri.png" alt="新百合ヶ丘の街並みの写真">
     </section>
 
     <!-- ============== キャッチコピー ============== -->
     <section class="copy">
       <div class="copy__inner">
 
-        <p class="copy__lead heading-en">Here for you, here for our city.</p>
+<p class="copy__lead heading-en">
+  Here for you,<span class="br"></span>
+  here for our city.
+</p>
 
-        <div class="copy__panel">
-          <h2 class="copy__title heading-ja">地域に寄り添う税務・会計パートナー</h2>
+<div class="copy__panel">
+  <h2 class="copy__title heading-ja">
+    地域に寄り添う<span class="br"></span>税務・会計パートナー
+  </h2>
 
-          <p class="copy__text text-body">
-            ちいさいからこそ、“気の利いた対応”と“目の行き届いたサポート”<br>
-            を心がけています。
-          </p>
+  <p class="copy__text text-body">
+    ちいさいからこそ、<span class="br"></span>
+    “気の利いた対応”と“目の行き届いたサポート”<span class="br"></span>
+    を心がけています。
+  </p>
+</div>
+
         </div>
 
       </div>
     </section>
 
-    <!-- ============== note セクション ============== -->
-    <section id="note" class="note" aria-labelledby="note-heading">
-      <div class="note__inner">
+<!-- ============== note セクション ============== -->
+<section id="note" class="note">
+  <div class="note__inner">
 
-        <header class="note__header">
-          <p id="note-heading" class="note__label heading-en">note</p>
-          <p class="note__lead text-small">地域活動・news を note で発信しています。</p>
-        </header>
+    <header class="note__header">
+      <p class="note__label heading-en">note</p>
+      <p class="note__lead text-small">地域活動・news を note で発信しています。</p>
+    </header>
 
-        <!-- ▼ 後で note API から最新3件を挿入するコンテナ ▼ -->
-        <div class="note__list" id="note-list">
-          <!-- デザイン確認用のダミー（開発中のみ） -->
-          <article class="note-card note-card--featured">
-            <p class="note-card__date">2025年10月1日</p>
-            <h3 class="note-card__title">タイトル</h3>
-            <p class="note-card__excerpt">
-              テキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            </p>
-          </article>
+    <!-- PHP or JS で最新3件を差し込むエリア -->
+    <div class="note__list" id="note-list">
 
-          <article class="note-card">
-            <p class="note-card__date">2025年10月1日</p>
-            <h3 class="note-card__title">タイトル</h3>
-            <p class="note-card__excerpt">
-              テキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            </p>
-          </article>
+    </div><!-- /.note__list -->
 
-          <article class="note-card">
-            <p class="note-card__date">2025年10月1日</p>
-            <h3 class="note-card__title">タイトル</h3>
-            <p class="note-card__excerpt">
-              テキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            </p>
-          </article>
-        </div>
+  </div><!-- /.note__inner -->
 
-      </div>
-
-      <!-- 下部の芝生エリア（背景画像をあてる） -->
-      <div class="note__grass" aria-hidden="true"></div>
-    </section>
+  <div class="note__grass"></div>
+</section>
 
     <!-- ============== services セクション ============== -->
     <section id="services" class="services" aria-labelledby="services-heading">
@@ -223,11 +211,15 @@
     </section>
 
     <!-- ============== about セクション ============== -->
-    <section id="about" class="about" aria-labelledby="about-heading">
+      <section id="about" class="about" aria-labelledby="about-heading">
+
+      <!-- 横並び用のラッパー（左：テキスト / 右：背景画像） -->
       <div class="about__overlay">
+
+        <!-- 左側テキスト領域 -->
         <div class="about__inner">
 
-          <p id="about-heading" class="about__label heading-en">About Us</p>
+          <h2 id="about-heading" class="about__label heading-en">About Us</h2>
 
           <p class="about__intro text-small">しんゆり会計は、</p>
 
@@ -247,9 +239,15 @@
           </p>
 
           <a href="#profile" class="about__button text-button">代表プロフィール</a>
+
         </div>
+
+        <!-- ★ 右側の画像は CSS の background-image で表示するため HTMLは空でOK -->
+        <div class="about__image-area" aria-hidden="true"></div>
+
       </div>
     </section>
+
 
     <!-- ============== info セクション ============== -->
     <section id="info" class="info" aria-labelledby="info-heading">
@@ -292,29 +290,6 @@
       </div>
     </section>
 
-    <!-- ============== 代表プロフィール（簡易） ============== -->
-    <section id="profile" class="profile" aria-labelledby="profile-heading">
-      <div class="profile__inner">
-        <h2 id="profile-heading" class="profile__title heading-ja">代表プロフィール</h2>
-        <p class="profile__text text-body">
-          代表 税理士 岡野 直純のプロフィールページです。<br>
-          （内容は後ほど実装予定です）
-        </p>
-      </div>
-    </section>
-
-    <!-- ============== Contact セクション（簡易） ============== -->
-    <section id="contact" class="contact" aria-labelledby="contact-heading">
-      <div class="contact__inner">
-        <h2 id="contact-heading" class="contact__title heading-ja">お問い合わせ</h2>
-        <p class="contact__text text-body">
-          ご相談・お問い合わせは、お電話またはメールにて承っております。<br>
-          電話：044-400-0505 / e-mail：shinyuri.accg@gmail.com
-        </p>
-        <!-- 将来的にフォームを実装する場合はここに追加 -->
-      </div>
-    </section>
-
   </main>
 
   <!-- ================= フッター ================= -->
@@ -323,5 +298,6 @@
       <p class="site-footer__copy">© しんゆり会計 ｜ 岡野直純税理士事務所</p>
     </div>
   </footer>
+   <script src="main.js"></script>
 </body>
 </html>
