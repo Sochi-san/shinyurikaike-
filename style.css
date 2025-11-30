@@ -1,0 +1,643 @@
+/**************************************************
+ * Foundation
+ **************************************************/
+
+html {
+  /* 1rem = 10px ベース */
+  font-size: 62.5%;
+}
+
+:root {
+  /* Colors */
+  --color-text-main: #093725;
+  --color-bg-base: #ffffff;
+  --color-bg-soft: #DBECD0;
+  --color-accent-deep: #003b2e;
+
+  /* Typography */
+  --font-ja-base: "BIZ UDPMincho", "Hiragino Mincho ProN",
+    "Yu Mincho", "游明朝", serif;
+  --font-en-script: "Petit Formal Script", "Times New Roman", serif;
+
+  /* Font sizes (rem) */
+  --fs-body: 1.6rem;       /* 16px：本文 */
+  --fs-small: 1.4rem;      /* 14px：補足・日付など */
+  --fs-button: 1.5rem;     /* 15px：ボタン */
+  --fs-title-ja: 2.4rem;   /* 24px：日本語タイトル */
+  --fs-title-en: 3.4rem;   /* 34px：英字タイトル */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--color-text-main);
+  background-color: var(--color-bg-base);
+  font-family: var(--font-ja-base);
+  font-size: var(--fs-body);
+  line-height: 1.8;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+/**************************************************
+ * Layout
+ **************************************************/
+
+.l-main {
+  max-width: 112rem; /* 1120px */
+  margin: 0 auto;
+  padding: 0 2rem 8rem;
+}
+
+.l-section {
+  padding: 6rem 0;
+}
+
+.l-section--soft {
+  background-color: var(--color-bg-soft);
+}
+
+/**************************************************
+ * Typography templates
+ **************************************************/
+
+.heading-en {
+  font-family: var(--font-en-script);
+  font-size: var(--fs-title-en);      /* PC時は 3.4rem */
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+
+
+.heading-ja {
+  font-family: var(--font-ja-base);
+  font-size: var(--fs-title-ja);
+  font-weight: 600;
+}
+
+.text-body {
+  font-size: var(--fs-body);
+  line-height: 1.8;
+}
+
+.text-small {
+  font-size: var(--fs-small);
+  line-height: 1.8;
+}
+
+.text-button {
+  font-size: var(--fs-button);
+  font-weight: 500;
+}
+
+/**************************************************
+ * Header
+ **************************************************/
+
+.site-header {
+  background-color: var(--color-bg-soft);
+}
+
+.site-header__inner {
+  max-width: 112rem;
+  margin: 0 auto;
+  padding: 1.4rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.4rem;
+}
+
+.site-header__logo {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+}
+
+.site-header__nav-list {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.site-header__nav-link {
+  text-decoration: none;
+  font-size: 1.4rem;
+}
+
+.site-header__nav-link:hover {
+  text-decoration: underline;
+}
+
+.site-header__sns {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 999px;
+  border: 0.1rem solid var(--color-text-main);
+  text-decoration: none;
+  font-size: 1.4rem;
+}
+.site-header__sns-icon {
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+/**************************************************
+ * Hero (Home)
+ **************************************************/
+
+.hero {
+  margin-top: 0;
+  padding-top: 0.8rem;
+}
+
+.hero__image {
+  width: 100%;
+  display: block;
+}
+
+/**************************************************
+ * Copy section
+ **************************************************/
+
+.copy {
+  background-color: var(--color-bg-soft);
+  padding: 6rem 0 8rem;
+}
+
+.copy__inner {
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.copy__lead {
+  font-family: var(--font-en-script);
+  font-size: 3.2rem; /* 32px 相当 */
+  color: var(--color-text-main);
+  margin: 0 0 4rem;
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+
+.copy__panel {
+  background-color: var(--color-bg-base);
+  padding: 5rem 3rem;
+  border-radius: 0.4rem;
+}
+
+.copy__title {
+  margin: 0 0 2.4rem;
+  font-family: var(--font-ja-base);
+  font-size: 2.4rem;
+  font-weight: 600;
+}
+
+.copy__text {
+  font-size: 1.6rem;
+  line-height: 1.8;
+}
+
+/**************************************************
+ * Note section
+ **************************************************/
+
+.note {
+  background-color: var(--color-bg-soft);
+  padding: 4rem 0 0;
+}
+
+.note__inner {
+  max-width: 110rem;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+}
+
+.note__header {
+  margin-bottom: 2.4rem;
+}
+
+.note__label {
+  margin: 0 0 0.4rem;
+}
+
+.note__lead {
+  margin: 0;
+}
+
+/* カード一覧 */
+.note__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.4rem;
+}
+
+.note-card {
+  background-color: var(--color-bg-base);
+  padding: 2.4rem 2rem 4rem;
+  border: 0.1rem solid transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.note-card__date {
+  margin: 0 0 1.2rem;
+  font-size: var(--fs-small);
+}
+
+.note-card__title {
+  margin: 0 0 1.6rem;
+  font-size: 1.8rem;
+  font-family: var(--font-ja-base);
+}
+
+.note-card__excerpt {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.7;
+}
+
+/* 下部の芝生 */
+.note__grass {
+  height: 8rem;
+  background-image: url("img/grass.jpg");
+  background-size: cover;
+  background-position: center top;
+}
+
+/**************************************************
+ * Services section
+ **************************************************/
+
+.services {
+  position: relative;
+  background-color: var(--color-bg-soft);
+  padding: 6rem 0 10rem;
+  overflow: hidden;
+}
+
+.services__inner {
+  max-width: 110rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.services__label {
+  margin: 0 0 2.4rem;
+}
+
+.services__lead {
+  margin: 0 0 4.8rem;
+}
+
+/* ★ PC 基本：横並び3つ / 折り返し2つを中央揃え */
+.services__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3.2rem;
+  justify-content: center; /* ここで中央揃え */
+}
+
+.service-card {
+  background-color: var(--color-bg-base);
+  width: 26rem;          /* 1カードの幅を固定 26rem */
+  max-width: 100%;
+  padding: 4rem 2rem;
+  border-radius: 2rem;
+  text-align: center;
+}
+
+.service-card__icon {
+  width: 6rem;
+  margin: 0 auto 2rem;
+}
+
+.service-card__title {
+  margin: 0 0 1.2rem;
+  font-size: 2rem;
+}
+
+.service-card__text {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+/* ボタン */
+.button-primary {
+  display: inline-block;
+  margin-top: 4.8rem;
+  padding: 1.2rem 4rem;
+  border-radius: 5rem;
+  background-color: var(--color-accent-deep);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* 右下の銅像画像 */
+.services__statue {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 20rem;
+  pointer-events: none;
+}
+
+/**************************************************
+ * About section
+ **************************************************/
+
+.about {
+  position: relative;
+  margin: 4rem auto;
+  max-width: 110rem;
+  height: 48rem;
+  background-image:
+    linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(255, 255, 255, 0.95) 35%,
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0.0) 70%
+    ),
+    url("img/office.jpg");
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+}
+
+.about__overlay {
+  width: 100%;
+  height: 100%;
+}
+
+.about__inner {
+  max-width: 54rem;
+  padding: 4.8rem 4rem;
+}
+
+.about__label {
+  margin: 0 0 2.4rem;
+}
+
+.about__intro {
+  margin: 0 0 1.6rem;
+}
+
+.about__message {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.6rem;
+  margin-bottom: 2.4rem;
+}
+
+.about__message-line {
+  width: 0.3rem;
+  background-color: var(--color-text-main);
+  border-radius: 0.2rem;
+  flex-shrink: 0;
+}
+
+.about__message-text {
+  margin: 0;
+  font-size: 1.8rem;
+  line-height: 1.8;
+}
+
+.about__text {
+  margin: 0 0 3.2rem;
+}
+
+.about__button {
+  display: inline-block;
+  padding: 1.2rem 3.2rem;
+  border-radius: 9.9rem;
+  background-color: var(--color-accent-deep);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/**************************************************
+ * Info section
+ **************************************************/
+
+.info {
+  background-color: #f2f2f2;
+}
+
+.info__inner {
+  max-width: 110rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: var(--color-bg-base);
+}
+
+.info__box {
+  padding: 4rem 4rem 6rem;
+  background-color: var(--color-bg-soft);
+  position: relative;
+}
+
+.info__title {
+  margin: 0 0 2rem;
+}
+
+.info__text {
+  margin: 0 0 3.2rem;
+}
+
+.info__button {
+  display: inline-block;
+  padding: 1.2rem 3.2rem;
+  border-radius: 5rem;
+  background-color: var(--color-accent-deep);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* 花のイラスト */
+.info__flower {
+  position: absolute;
+  right: 3rem;
+  top: 2rem;
+  width: 14rem;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* マップ */
+.info__map {
+  border-left: 0.1rem solid #d6d6d6;
+}
+
+/**************************************************
+ * Profile & Contact (簡易)
+ **************************************************/
+
+.profile {
+  padding: 6rem 0;
+}
+
+.profile__inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.profile__title {
+  margin: 0 0 2rem;
+}
+
+.profile__text {
+  margin: 0;
+}
+
+.contact {
+  padding: 6rem 0;
+}
+
+.contact__inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.contact__title {
+  margin: 0 0 2rem;
+}
+
+.contact__text {
+  margin: 0;
+}
+
+/**************************************************
+ * Footer
+ **************************************************/
+
+.site-footer {
+  background-color: var(--color-bg-soft);
+  padding: 2rem 0;
+}
+
+.site-footer__inner {
+  max-width: 112rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.site-footer__copy {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+/**************************************************
+ * Responsive
+ **************************************************/
+@media (max-width: 60rem) { /* 600px以下：スマホ */
+
+  .site-header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .note__list {
+    grid-template-columns: 1fr;
+  }
+
+  /* ★ スマホでも最低2つ横並びにする */
+  .service-card {
+    /* 2列になるように幅を半分 - 余白分 */
+    flex: 0 1 calc(50% - 1.6rem);
+    width: auto;
+    padding: 1rem 0.5rem;
+  }
+  .services__grid {
+    gap: 1.6rem;
+  }
+
+  .about {
+    height: auto;
+    background-image:
+      linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.98) 0%,
+        rgba(255, 255, 255, 0.9) 45%,
+        rgba(255, 255, 255, 0.0) 100%
+      ),
+      url("img/office.jpg");
+  }
+
+  .about__inner {
+    max-width: none;
+    padding: 3.2rem 2rem 4rem;
+  }
+
+  .info__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .info__map {
+    height: 28rem;
+    border-left: none;
+    border-top: 0.1rem solid #d6d6d6;
+  }
+
+  .services__statue {
+    width: 16rem;
+  }
+  .copy {
+    padding: 4rem 0 5rem;
+  }
+
+  .copy__inner {
+    padding: 0 1.6rem;
+  }
+
+  .copy__lead {
+    font-size: 2.4rem;
+    line-height: 1.4;
+    margin-bottom: 2.8rem;
+  }
+
+  .copy__panel {
+    padding: 3.2rem 2.4rem 3.6rem;
+    border-radius: 1.6rem;
+    box-shadow: 0 0.4rem 1.4rem rgba(0, 0, 0, 0.04);
+  }
+
+  .copy__title {
+    font-size: 2.0rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .copy__text {
+    font-size: 1.5rem;
+    line-height: 1.8;
+  }
+}
