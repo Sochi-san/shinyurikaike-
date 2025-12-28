@@ -121,39 +121,6 @@ function initHeroIntro() {
 }
 
 /**************************************************
- * Copy section breeze motion
- **************************************************/
-function initBreezeMotion() {
-  const copySection = document.querySelector(".copy");
-  if (!copySection) return;
-
-  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-  if (prefersReduced.matches) return;
-
-  const baseSpeed = 1;
-  const maxSpeed = 1.35;
-  const easing = 0.08;
-  const decay = 0.04;
-  let targetSpeed = baseSpeed;
-  let currentSpeed = baseSpeed;
-
-  const onScroll = () => {
-    targetSpeed = maxSpeed;
-  };
-
-  window.addEventListener("scroll", onScroll, { passive: true });
-
-  const tick = () => {
-    currentSpeed += (targetSpeed - currentSpeed) * easing;
-    targetSpeed += (baseSpeed - targetSpeed) * decay;
-
-    copySection.style.setProperty("--breeze-speed", currentSpeed.toFixed(3));
-    requestAnimationFrame(tick);
-  };
-
-  requestAnimationFrame(tick);
-}
-/**************************************************
  * note 最新3件取得＆描画
  *  - note-rss.php 経由で公式 note の RSS を取得する前提
  **************************************************/
@@ -257,4 +224,38 @@ function stripHtml(html) {
 function truncateText(text, maxLength) {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + "…";
+}
+
+/**************************************************
+ * Copy section breeze motion
+ **************************************************/
+function initBreezeMotion() {
+  const copySection = document.querySelector(".copy");
+  if (!copySection) return;
+
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (prefersReduced.matches) return;
+
+  const baseSpeed = 1;
+  const maxSpeed = 1.35;
+  const easing = 0.08;
+  const decay = 0.04;
+  let targetSpeed = baseSpeed;
+  let currentSpeed = baseSpeed;
+
+  const onScroll = () => {
+    targetSpeed = maxSpeed;
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  const tick = () => {
+    currentSpeed += (targetSpeed - currentSpeed) * easing;
+    targetSpeed += (baseSpeed - targetSpeed) * decay;
+
+    copySection.style.setProperty("--breeze-speed", currentSpeed.toFixed(3));
+    requestAnimationFrame(tick);
+  };
+
+  requestAnimationFrame(tick);
 }

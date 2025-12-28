@@ -387,51 +387,63 @@ body.is-hero-done .hero__content {
 .copy::after {
   content: "";
   position: absolute;
-  inset: -20%;
+  left: -20%;
+  width: 140%;
+  height: 65%;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.28;
-  filter: blur(18px);
-  transform: translate3d(-6%, -4%, 0);
-  background:
-    radial-gradient(50% 60% at 30% 40%, rgba(255, 255, 255, 0.35), transparent 70%),
-    radial-gradient(60% 70% at 70% 60%, rgba(187, 221, 210, 0.28), transparent 72%),
-    linear-gradient(120deg, rgba(210, 236, 230, 0.22), rgba(255, 255, 255, 0));
-  animation: breeze-drift calc(100s / var(--breeze-speed)) ease-in-out infinite alternate;
+  /* 微風ベールのトーン：上→下で消えていく */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.5) 45%,
+    rgba(255, 255, 255, 0) 85%
+  );
+  opacity: 0.82;           /* ← ベールの濃さ */
+  filter: blur(0.8px);     /* ← やわらかさ */
+  mix-blend-mode: screen;
+  transform-origin: center;
+  animation-timing-function: ease-in-out;
+}
+
+.copy::before {
+  /* Layer A: larger / slower */
+  top: 12%;
+  /* 大きめの波形を強調（約30%振幅） */
+  clip-path: path("M0 62% C 4% 22% 16% 22% 22% 62% C 28% 102% 40% 102% 46% 62% C 52% 22% 64% 22% 70% 62% C 76% 102% 88% 102% 94% 62% C 100% 22% 112% 22% 118% 62% L118% 100% L0 100% Z");
+  animation: breeze-layer-a calc(18s / var(--breeze-speed)) ease-in-out infinite alternate;
 }
 
 .copy::after {
-  opacity: 0.22;
-  filter: blur(22px);
-  transform: translate3d(-10%, -6%, 0);
-  background:
-    radial-gradient(55% 65% at 25% 60%, rgba(225, 242, 238, 0.3), transparent 72%),
-    radial-gradient(60% 60% at 75% 40%, rgba(199, 228, 219, 0.25), transparent 70%),
-    linear-gradient(135deg, rgba(208, 236, 230, 0.2), rgba(255, 255, 255, 0));
-  animation: breeze-drift-secondary calc(115s / var(--breeze-speed)) ease-in-out infinite alternate;
+  /* Layer B: slightly smaller / faster */
+  top: 12%;
+  opacity: 0.58;
+  filter: blur(1rem);
+  clip-path: path("M-5% 58% C 1% 14% 13% 14% 19% 58% C 25% 102% 37% 102% 43% 58% C 49% 14% 61% 14% 67% 58% C 73% 102% 85% 102% 91% 58% C 97% 14% 109% 14% 115% 58% L115% 100% L-5% 100% Z");
+  animation: breeze-layer-b calc(14s / var(--breeze-speed)) ease-in-out infinite alternate;
 }
 
-@keyframes breeze-drift {
+@keyframes breeze-layer-a {
   0% {
-    transform: translate3d(-6%, -4%, 0) rotate(0.6deg);
+    transform: translate3d(-6%, -1%, 0) scale(1.03);
   }
-  45% {
-    transform: translate3d(3%, 2%, 0) rotate(-0.4deg);
+  50% {
+    transform: translate3d(2%, 1.5%, 0) scale(1.05);
   }
   100% {
-    transform: translate3d(8%, 6%, 0) rotate(0.5deg);
+    transform: translate3d(7%, 3%, 0) scale(1.02);
   }
 }
 
-@keyframes breeze-drift-secondary {
+@keyframes breeze-layer-b {
   0% {
-    transform: translate3d(-10%, -6%, 0) rotate(-0.4deg);
+    transform: translate3d(6%, -2%, 0) scale(1.08);
   }
-  55% {
-    transform: translate3d(-2%, 1%, 0) rotate(0.2deg);
+  40% {
+    transform: translate3d(1%, 1%, 0) scale(1.05);
   }
   100% {
-    transform: translate3d(6%, 5%, 0) rotate(-0.3deg);
+    transform: translate3d(-7%, 4%, 0) scale(1.01);
   }
 }
 
