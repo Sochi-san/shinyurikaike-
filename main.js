@@ -4,6 +4,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   initBurgerMenu();
   initNoteFeed();
+  initHeaderReveal();
+  initHeroIntro();
+  initBreezeMotion();
 });
 
 /**************************************************
@@ -44,6 +47,112 @@ function initBurgerMenu() {
   });
 }
 
+/**************************************************
+ * ヒーローを通過したらヘッダーを表示
+ **************************************************/
+function initHeaderReveal() {
+  const header = document.querySelector(".site-header");
+  const hero = document.querySelector(".hero");
+
+  if (!header || !hero) return;
+
+  const toggleHeader = () => {
+    const heroBottom = hero.getBoundingClientRect().bottom;
+    const shouldShow = heroBottom <= 0;
+
+    header.classList.toggle("site-header--visible", shouldShow);
+    header.classList.toggle("site-header--prefade", !shouldShow);
+  };
+
+  toggleHeader();
+
+  window.addEventListener("scroll", toggleHeader, { passive: true });
+  window.addEventListener("resize", toggleHeader);
+}
+
+/**************************************************
+ * ヒーロー ローディング演出
+ **************************************************/
+function initHeroIntro() {
+  const hero = document.querySelector(".hero");
+
+  if (!hero) return;
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const hasPlayed =
+    document.documentElement.classList.contains("is-hero-intro-done") ||
+    sessionStorage.getItem("heroIntroPlayed") === "1";
+
+  const setFinalState = () => {
+    hero.classList.add("hero--text-visible", "hero--bg-visible", "hero--final");
+    document.body.classList.add("is-hero-done");
+    document.documentElement.classList.add("is-hero-intro-done");
+  };
+
+  if (prefersReducedMotion.matches || hasPlayed) {
+    setFinalState();
+    sessionStorage.setItem("heroIntroPlayed", "1");
+    return;
+  }
+
+  document.body.classList.add("is-hero-animating");
+
+  const TEXT_DELAY = 120; // ms
+  const HOLD_DURATION = 1100;
+  const BG_REVEAL_DURATION = 1000;
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      hero.classList.add("hero--text-visible");
+    }, TEXT_DELAY);
+
+    setTimeout(() => {
+      hero.classList.add("hero--bg-visible");
+    }, TEXT_DELAY + HOLD_DURATION);
+
+    setTimeout(() => {
+      hero.classList.add("hero--final");
+      document.body.classList.remove("is-hero-animating");
+      document.body.classList.add("is-hero-done");
+      sessionStorage.setItem("heroIntroPlayed", "1");
+      document.documentElement.classList.add("is-hero-intro-done");
+    }, TEXT_DELAY + HOLD_DURATION + BG_REVEAL_DURATION);
+  });
+}
+
+/**************************************************
+ * Copy section breeze motion
+ **************************************************/
+function initBreezeMotion() {
+  const copySection = document.querySelector(".copy");
+  if (!copySection) return;
+
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (prefersReduced.matches) return;
+
+  const baseSpeed = 1;
+  const maxSpeed = 1.35;
+  const easing = 0.08;
+  const decay = 0.04;
+  let targetSpeed = baseSpeed;
+  let currentSpeed = baseSpeed;
+
+  const onScroll = () => {
+    targetSpeed = maxSpeed;
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  const tick = () => {
+    currentSpeed += (targetSpeed - currentSpeed) * easing;
+    targetSpeed += (baseSpeed - targetSpeed) * decay;
+
+    copySection.style.setProperty("--breeze-speed", currentSpeed.toFixed(3));
+    requestAnimationFrame(tick);
+  };
+
+  requestAnimationFrame(tick);
+}
 /**************************************************
  * note 最新3件取得＆描画
  *  - note-rss.php 経由で公式 note の RSS を取得する前提
@@ -89,15 +198,24 @@ async function initNoteFeed() {
 
       const pubDate = formatNoteDate(pubDateRaw);
       const excerpt = truncateText(stripHtml(description), 80);
-      const isFeatured = index === 0;
+      const isLatest = index === 0;
 
       const card = document.createElement("article");
-      card.className = "note-card" + (isFeatured ? " note-card--featured" : "");
+      card.className = "note-card" + (isLatest ? " note-card--latest" : "");
 
       card.innerHTML = `
-        <p class="note-card__date text-small">${pubDate}</p>
+       <div class="note-card__top">
+          <span class="note-card__date-tag">
+            <span class="note-card__date-icon">📅</span>${pubDate}
+          </span>
+          ${
+            isLatest
+              ? '<span class="note-card__badge note-card__badge--new">NEW</span>'
+              : ""
+          }
+        </div>
         <h3 class="note-card__title heading-ja">
-          <a href="${link}" target="_blank" rel="noopener noreferrer">
+          <a class="note-card__title-link" href="${link}" target="_blank" rel="noopener noreferrer">
             ${title}
           </a>
         </h3>
