@@ -695,18 +695,31 @@ body.is-hero-done .hero__content {
   height: var(--wave-h);
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  background-position: center;
   pointer-events: none;
   z-index: 1;
 }
 
 .services::before {
-  top: calc(var(--wave-h) * -1 + 1px);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 200' preserveAspectRatio='none'><path d='M0,150 C260,40 540,40 820,120 C1040,190 1220,200 1440,140 L1440,200 L0,200 Z' fill='%23E6F2E6'/></svg>");
+  top: -2px;
+  transform: translateY(calc(var(--wave-h) * -1));
+  /*
+   * 右肩上がりを強めたい場合:
+   * - 先頭の M0,154 の y 値を大きくする（左をさらに下げる）
+   * - 終端の 1440,48 の y 値を小さくする（右をさらに上げる）
+   */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220' preserveAspectRatio='none'><defs><linearGradient id='svTopG1' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23CFE7C9'/><stop offset='1' stop-color='%23B8D9B0'/></linearGradient><linearGradient id='svTopG2' x1='0' y1='0.15' x2='1' y2='0.95'><stop offset='0' stop-color='%23D5ECD0'/><stop offset='1' stop-color='%23BCDDB4'/></linearGradient><linearGradient id='svTopG3' x1='0.15' y1='0.05' x2='0.95' y2='0.95'><stop offset='0' stop-color='%23DDF1D7'/><stop offset='1' stop-color='%23B7D8AF'/></linearGradient></defs><path d='M0,154 C210,218 470,198 700,132 C940,64 1160,24 1440,48 L1440,220 L0,220 Z' fill='url(%23svTopG1)' opacity='0.42'/><path d='M0,170 C240,210 510,188 760,124 C1010,58 1230,34 1440,58 L1440,220 L0,220 Z' fill='url(%23svTopG2)' opacity='0.31'/><path d='M0,138 C220,198 500,176 740,114 C980,54 1210,18 1440,40 L1440,220 L0,220 Z' fill='url(%23svTopG3)' opacity='0.22'/><path d='M0,160 C220,226 500,204 742,132 C994,58 1220,24 1440,46 L1440,220 L0,220 Z' fill='%23E6F2E6'/></svg>");
 }
 
 .services::after {
-  bottom: calc(var(--wave-h) * -1 + 1px);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 200' preserveAspectRatio='none'><path d='M0,50 C240,160 520,160 800,90 C1020,20 1200,10 1440,60 L1440,0 L0,0 Z' fill='%23E6F2E6'/></svg>");
+  bottom: -2px;
+  transform: translateY(var(--wave-h));
+  /*
+   * 右肩上がりを弱めたい場合:
+   * - 先頭の M0,160 の y 値を小さくする（左を上げる）
+   * - 終端の 1440,44 の y 値を大きくする（右を下げる）
+   */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220' preserveAspectRatio='none'><defs><linearGradient id='svBottomG1' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23D2E9CC'/><stop offset='1' stop-color='%23BADCB3'/></linearGradient><linearGradient id='svBottomG2' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23DDF0D8'/><stop offset='1' stop-color='%23BCDDB4'/></linearGradient><linearGradient id='svBottomG3' x1='0.05' y1='0.1' x2='0.95' y2='0.95'><stop offset='0' stop-color='%23CBE4C5'/><stop offset='1' stop-color='%23B6D7AE'/></linearGradient></defs><path d='M0,154 C210,214 470,194 702,128 C954,58 1172,20 1440,44 L1440,0 L0,0 Z' fill='url(%23svBottomG1)' opacity='0.45'/><path d='M0,170 C250,206 522,184 770,120 C1020,58 1240,30 1440,50 L1440,0 L0,0 Z' fill='url(%23svBottomG2)' opacity='0.33'/><path d='M0,136 C232,194 508,174 744,112 C984,50 1220,18 1440,40 L1440,0 L0,0 Z' fill='url(%23svBottomG3)' opacity='0.2'/><path d='M0,160 C228,226 504,202 744,128 C988,54 1220,22 1440,46 L1440,0 L0,0 Z' fill='%23E6F2E6'/></svg>");
 }
 
 .services__inner {
