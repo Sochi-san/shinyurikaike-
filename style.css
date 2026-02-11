@@ -315,17 +315,23 @@ body.is-hero-done .hero__content {
   transform: translateY(0);
 }
 
-
 /**************************************************
- * Copy section
+ * Copy section 
  **************************************************/
-
 .copy {
   background-color: var(--color-bg-soft);
   padding: 6rem 0 8rem;
   position: relative;
   overflow: clip;
   --breeze-speed: 1;
+
+  /* 波の周期（px）＝ここが“綺麗な周期”の本丸 */
+  --wave-a: 520px;
+  --wave-b: 460px;
+
+  /* 波の高さ感（見た目の“うねり”） */
+  --wave-height: 70%;
+  --wave-top: 15%;
 }
 
 .copy__inner {
@@ -348,28 +354,11 @@ body.is-hero-done .hero__content {
 
 .copy__panel {
   position: relative;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(12px) saturate(125%);
-  -webkit-backdrop-filter: blur(12px) saturate(125%);
   padding: 5rem 3rem;
-  border-radius: 2.4rem;
-  border: 0.1rem solid rgba(255, 255, 255, 0.45);
-  box-shadow: 0 2.4rem 8rem rgba(12, 50, 35, 0.1);
 }
 
 .copy__panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.45),
-    rgba(255, 255, 255, 0)
-  );
-  opacity: 0.2;
-  pointer-events: none;
+  content: none;
 }
 
 .copy__panel > * {
@@ -377,83 +366,67 @@ body.is-hero-done .hero__content {
   z-index: 1;
 }
 
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .copy__panel {
-    background: rgba(255, 255, 255, 0.9);
+/* ===== スマホだけ改行するスイッチ ===== */
+.br { display: none; }
+@media (max-width: 768px){ .br { display: inline; } }
+.sp-only { display: none; }
+@media (max-width: 768px){ .sp-only { display: block; } }
+
+/* ===== panel内を左右レイアウトにする ===== */
+.copy__panel{
+  display: grid;
+  grid-template-columns: 1fr 1fr;     /* 左：見出し / 右：本文 */
+  gap: clamp(20px, 3vw, 56px);
+  align-items: start;
+  text-align: left;                   /* スクショ寄せ */
+}
+
+/* 左の見出し：大きく、行間気持ちよく */
+.copy__title{
+  margin: 0;
+  color: var(--color-text-main);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  font-size: clamp(36px, 4.2vw, 64px);
+  text-wrap: balance;
+}
+
+/* 右本文：読みやすい行幅に絞る */
+.copy__text{
+  margin: 0;
+  max-width: 42ch;                    /* ←読みやすさの核 */
+  line-height: 2.0;
+  letter-spacing: 0.02em;
+  font-size: 1.8rem;
+}
+
+/* SPは縦積み + 文字サイズ調整 */
+@media (max-width: 768px){
+  .copy__panel{
+    grid-template-columns: 1fr;
+    gap: 18px;
+    text-align: left;
+    padding: 3.2rem 2rem;             /* 既存より少し詰めると綺麗 */
+  }
+
+  .copy__title{
+    font-size: clamp(24px, 7.4vw, 34px);
+    line-height: 1.3;
+  }
+
+  .copy__text{
+    max-width: 34ch;
+    line-height: 2.05;
   }
 }
 
+/* キャッチコピー背景の波アニメーションは無効化 */
 .copy::before,
 .copy::after {
-  content: "";
-  position: absolute;
-  left: -20%;
-  width: 140%;
-  height: 65%;
-  pointer-events: none;
-  z-index: 0;
-  /* 微風ベールのトーン：上→下で消えていく */
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.85) 0%,
-    rgba(255, 255, 255, 0.5) 45%,
-    rgba(255, 255, 255, 0) 85%
-  );
-  opacity: 0.82;           /* ← ベールの濃さ */
-  filter: blur(0.8px);     /* ← やわらかさ */
-  mix-blend-mode: screen;
-  transform-origin: center;
-  animation-timing-function: ease-in-out;
+  content: none;
 }
 
-.copy::before {
-  /* Layer A: larger / slower */
-  top: 12%;
-  /* 大きめの波形を強調（約30%振幅） */
-  clip-path: path("M0 62% C 4% 22% 16% 22% 22% 62% C 28% 102% 40% 102% 46% 62% C 52% 22% 64% 22% 70% 62% C 76% 102% 88% 102% 94% 62% C 100% 22% 112% 22% 118% 62% L118% 100% L0 100% Z");
-  animation: breeze-layer-a calc(18s / var(--breeze-speed)) ease-in-out infinite alternate;
-}
-
-.copy::after {
-  /* Layer B: slightly smaller / faster */
-  top: 12%;
-  opacity: 0.58;
-  filter: blur(1rem);
-  clip-path: path("M-5% 58% C 1% 14% 13% 14% 19% 58% C 25% 102% 37% 102% 43% 58% C 49% 14% 61% 14% 67% 58% C 73% 102% 85% 102% 91% 58% C 97% 14% 109% 14% 115% 58% L115% 100% L-5% 100% Z");
-  animation: breeze-layer-b calc(14s / var(--breeze-speed)) ease-in-out infinite alternate;
-}
-
-@keyframes breeze-layer-a {
-  0% {
-    transform: translate3d(-6%, -1%, 0) scale(1.03);
-  }
-  50% {
-    transform: translate3d(2%, 1.5%, 0) scale(1.05);
-  }
-  100% {
-    transform: translate3d(7%, 3%, 0) scale(1.02);
-  }
-}
-
-@keyframes breeze-layer-b {
-  0% {
-    transform: translate3d(6%, -2%, 0) scale(1.08);
-  }
-  40% {
-    transform: translate3d(1%, 1%, 0) scale(1.05);
-  }
-  100% {
-    transform: translate3d(-7%, 4%, 0) scale(1.01);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .copy::before,
-  .copy::after {
-    animation: none;
-  }
-}
-
+/* Text */
 .copy__title {
   margin: 0 0 2.4rem;
   font-family: var(--font-ja-base);
@@ -461,10 +434,8 @@ body.is-hero-done .hero__content {
   font-weight: 600;
 }
 
-.copy__text {
-  font-size: 1.6rem;
-  line-height: 1.8;
-}
+.copy__text { font-size: 1.6rem; line-height: 1.8; }
+.copy__text--left { text-align: left; }
 
 .copy__text--tsukushi {
   font-family: "Tsukushi Mincho", "筑紫明朝", var(--font-ja-base);
@@ -472,9 +443,10 @@ body.is-hero-done .hero__content {
   letter-spacing: 0.05em;
 }
 
-.br {
-  display: none;
-}
+.br { display: none; }
+.br--always { display: block; height: 0; }
+
+
 
 /**************************************************
  * Note section
@@ -483,6 +455,7 @@ body.is-hero-done .hero__content {
 .note {
   background-color: #F6F8F4; /* 薄い背景（しんゆり会計専用） */
   padding: 6rem 0 0;
+  position: relative;
 }
 
 .note__inner {
@@ -626,6 +599,8 @@ body.is-hero-done .hero__content {
 .note__archive {
   margin: 3.2rem 0 0;
   text-align: center;
+  position: relative;
+  z-index: 3;
 }
 
 .note__archive-link {
@@ -640,6 +615,8 @@ body.is-hero-done .hero__content {
   text-decoration: none;
   font-weight: 600;
   letter-spacing: 0.04em;
+  text-align: center;
+  line-height: 1.6;
   min-height: 4.4rem;
   transition: background 0.2s ease, transform 0.2s ease;
 }
@@ -670,6 +647,7 @@ body.is-hero-done .hero__content {
 /* 下部の芝生（既存仕様） */
 .note__grass {
   height: clamp(10rem, 12vw, 18rem);
+  background-color: var(--color-bg-soft);
   background-image: url("img/kusa.png");
   background-size: 100% auto;
   background-repeat: no-repeat;
@@ -690,7 +668,7 @@ body.is-hero-done .hero__content {
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0) 0%,
-    var(--color-bg-soft) 100%
+    #F6F8F4 100%
   );
 }
 
@@ -701,24 +679,34 @@ body.is-hero-done .hero__content {
 
 .services {
   position: relative;
-  background-color: var(--color-bg-soft);
-  padding: 4rem 0 10rem;
-  overflow: hidden;
+  background-color: #E6F2E6;
+  z-index: 2;
+  padding: 2rem 0 4rem;
+  overflow: visible;
+  --wave-h: clamp(90px, 12vw, 180px);
+}
+
+.services::before,
+.services::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: var(--wave-h);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .services::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  height: clamp(3rem, 6vw, 8rem);
-  top: 0;
-  background: linear-gradient(
-    to bottom,
-    var(--color-bg-soft) 0%,
-    rgba(219, 236, 208, 0) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
+  top: calc(var(--wave-h) * -1 + 1px);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 200' preserveAspectRatio='none'><path d='M0,150 C260,40 540,40 820,120 C1040,190 1220,200 1440,140 L1440,200 L0,200 Z' fill='%23E6F2E6'/></svg>");
+}
+
+.services::after {
+  bottom: calc(var(--wave-h) * -1 + 1px);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 200' preserveAspectRatio='none'><path d='M0,50 C240,160 520,160 800,90 C1020,20 1200,10 1440,60 L1440,0 L0,0 Z' fill='%23E6F2E6'/></svg>");
 }
 
 .services__inner {
@@ -729,6 +717,7 @@ body.is-hero-done .hero__content {
   position: relative;
   z-index: 2;
 }
+
 
 .services__label {
   margin: 0 0 2.4rem;
@@ -751,22 +740,23 @@ body.is-hero-done .hero__content {
 }
 
 .service-card {
-  background-color: var(--color-bg-base);
+  background-color: #fff;
   width: 26rem;          /* 1カードの幅を固定 26rem */
   max-width: 100%;
   padding: 4rem 2rem;
   border-radius: 2rem;
   text-align: center;
+  border: 1px solid rgba(9, 55, 37, 0.06);
   transition:
     transform 0.32s cubic-bezier(0.25, 0.8, 0.35, 1),
     box-shadow 0.32s cubic-bezier(0.25, 0.8, 0.35, 1);
-  box-shadow: 0 8px 20px rgba(9, 55, 37, 0.08);
+  box-shadow: 0 6px 18px rgba(9, 55, 37, 0.08);
 }
 
 .service-card:hover,
 .service-card:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 30px rgba(9, 55, 37, 0.14);
+  transform: translateY(-6px);
+  box-shadow: 0 18px 32px rgba(9, 55, 37, 0.14);
 }
 
 .service-card:active {
@@ -786,7 +776,7 @@ body.is-hero-done .hero__content {
 
 .service-card__title {
   margin: 0 0 1.2rem;
-  font-size: 2rem;
+  font-size: 2.1rem;
   position: relative;
   display: inline-block;
   padding-bottom: 0.6rem;
@@ -812,7 +802,7 @@ body.is-hero-done .hero__content {
 
 .service-card__text {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   line-height: 1.5;
 }
 
@@ -823,6 +813,7 @@ body.is-hero-done .hero__content {
   line-height: 1.8;
   font-size: 1.4rem;
 }
+
 
 /**************************************************
  * Past blog page
@@ -1150,7 +1141,7 @@ body.is-hero-done .hero__content {
 }
 
 .button-primary {
-  margin-top: 4.8rem;
+  margin-top: 2rem;
 }
 
 /* 右下の銅像画像 */
@@ -1163,6 +1154,26 @@ body.is-hero-done .hero__content {
 }
 
 /**************************************************
+ * Branch divider
+ **************************************************/
+
+.branch-divider {
+  position: relative;
+  height: 0;
+  z-index: 3;
+}
+
+.branch-divider__image {
+  position: absolute;
+  left: 0;
+  top: -30rem;
+  width: clamp(14rem, 22vw, 34rem);
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+
+/**************************************************
  * About section
  **************************************************/
 
@@ -1171,16 +1182,17 @@ body.is-hero-done .hero__content {
   width: 100%;
   margin: 0;
   padding: clamp(6rem, 10vw, 10rem) 0;
+  z-index: 1;
   background-image:
     linear-gradient(
       to right,
-      rgba(255, 255, 255, 0.98) 0%,
-      rgba(255, 255, 255, 0.97) 30%,
+        rgba(255, 255, 255, 0.98) 0%,
+        rgba(255, 255, 255, 0.97) 30%,
       rgba(255, 255, 255, 0.92) 55%,
       rgba(255, 255, 255, 0.70) 75%,
       rgba(255, 255, 255, 0.45) 100%
     ),
-    url("img/office.jpeg");
+    url("img/office.png");
   background-size: cover;
   background-position: center right;
   background-repeat: no-repeat;
@@ -1196,6 +1208,8 @@ body.is-hero-done .hero__content {
 .about__inner {
   max-width: 54rem;
   padding: 4.8rem 4rem;
+  position: relative;
+  z-index: 6;
 }
 
 .about__label {
@@ -1204,6 +1218,8 @@ body.is-hero-done .hero__content {
 
 .about__intro {
   margin: 0 0 1.6rem;
+  font-size: clamp(1.6rem, 1.4vw, 1.8rem);
+  letter-spacing: 0.08em;
 }
 
 .about__message {
@@ -1220,14 +1236,39 @@ body.is-hero-done .hero__content {
   flex-shrink: 0;
 }
 
-.about__message-text {
+.about__values {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.about__values-list {
   margin: 0;
-  font-size: 1.8rem;
-  line-height: 1.8;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+
+.about__values-list li {
+  margin: 0;
+  position: relative;
+  padding-left: 0;
+  font-size: clamp(1.9rem, 2.1vw, 2.4rem);
+  line-height: 1.6;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.about__break {
+  display: inline;
 }
 
 .about__text {
   margin: 0 0 3.2rem;
+  font-size: clamp(1.5rem, 1.4vw, 1.7rem);
+  line-height: 2;
+  letter-spacing: 0.04em;
 }
 
 /**************************************************
@@ -1236,7 +1277,7 @@ body.is-hero-done .hero__content {
 
 .info {
   background-color: #eff5ef;
-  padding: 8rem 0;
+  padding: 8rem 0 6rem;
 }
 
 .info__inner {
@@ -1244,17 +1285,24 @@ body.is-hero-done .hero__content {
   margin: 0 auto;
   padding: 0 var(--layout-side-padding);
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2.4rem;
   align-items: stretch;
 }
 
 .info__box {
-  padding: 4rem 4rem 6rem;
-  background-color: var(--color-bg-base);
-  border-radius: 2.4rem;
-  box-shadow: 0 2rem 3.6rem rgba(9, 55, 37, 0.08);
+  padding: 2.4rem 1.6rem 3.2rem;
+  background-color: transparent;
+  background-image: url("img/logo_girl.png");
+  background-repeat: no-repeat;
+  background-position: right 2.4rem bottom 0.6rem;
+  background-size: clamp(18rem, 38vw, 34rem);
+  border-radius: 0;
+  box-shadow: none;
   position: relative;
+}
+
+.info__text {
+  line-height: 1.9;
 }
 
 .info__title {
@@ -1263,16 +1311,6 @@ body.is-hero-done .hero__content {
 
 .info__text {
   margin: 0 0 3.2rem;
-}
-
-/* 花のイラスト */
-.info__flower {
-  position: absolute;
-  right: 3rem;
-  top: 2rem;
-  width: 14rem;
-  opacity: 0.8;
-  pointer-events: none;
 }
 
 /* マップ */
@@ -1478,6 +1516,8 @@ body.is-hero-done .hero__content {
   }
   .note__archive-link {
     width: 100%;
+    line-height: 1.7;
+    padding: 1.6rem 2.4rem;
   }
 
   /* services：カードは2列・中央寄せ */
@@ -1497,6 +1537,10 @@ body.is-hero-done .hero__content {
     width: 14rem;
     right: 0;
     bottom: -2rem;
+  }
+
+  .branch-divider {
+    display: none;
   }
 
   .pastblog-header__inner {
@@ -1536,7 +1580,7 @@ body.is-hero-done .hero__content {
   .about {
     position: relative;
     height: auto;
-    background-image: url("img/office.jpeg");  
+    background-image: url("img/office.png");  
     background-size: cover;
     background-position: left -90px center;
     background-repeat: no-repeat;
@@ -1566,13 +1610,67 @@ body.is-hero-done .hero__content {
     padding: 3.2rem 2rem 4rem;
   }
 
+  .about__intro {
+    font-size: 1.5rem;
+    letter-spacing: 0.06em;
+  }
+
+  .about__message {
+    gap: 1.2rem;
+  }
+
+  .about__values-list {
+    gap: 0.8rem;
+  }
+
+  .about__values-list li {
+    font-size: 1.8rem;
+    line-height: 1.65;
+  }
+
+  .about__break {
+    display: block;
+  }
+
+  .about__text {
+    font-size: 1.5rem;
+    line-height: 2.05;
+  }
+
   /* Info：1カラム＋カード間余白 */
   .info__inner {
     grid-template-columns: 1fr;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .info {
+    position: relative;
+    padding-bottom: 0;
+  }
+
+  .info::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: clamp(20rem, 52vw, 32rem);
+    height: clamp(20rem, 52vw, 32rem);
+    background-image: url("img/logo_girl.png");
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-size: contain;
+    pointer-events: none;
+    z-index: 0;
   }
 
   .info__box {
-    padding: 3.2rem 2.4rem 4rem;
+    padding: 3.2rem 2.4rem 6rem;
+    background-image: none;
+    background-origin: border-box;
+    background-clip: border-box;
+    background-size: clamp(14rem, 42vw, 26rem);
   }
 
   .info__map {
@@ -1617,8 +1715,6 @@ body.is-hero-done .hero__content {
 
   .copy__panel {
     padding: 3.2rem 2.4rem 3.6rem;
-    border-radius: 1.6rem;
-    box-shadow: 0 0.4rem 1.4rem rgba(0, 0, 0, 0.04);
   }
 
   .copy__title {
