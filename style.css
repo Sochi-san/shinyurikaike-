@@ -225,63 +225,105 @@ a {
 
 .hero {
   position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  min-height: 56rem;
   overflow: hidden;
-  margin: 0;
-  padding: clamp(10rem, 12vw, 18rem) clamp(2rem, 6vw, 8rem);
   color: #ffffff;
-  text-align: center;
-  background-color: #ffffff;
 }
 
 .hero::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, var(--hero-overlay-start) 0%, var(--hero-overlay-end) 85%);
+  z-index: 4;
+  background: linear-gradient(180deg, rgba(7, 29, 44, 0.06) 0%, rgba(7, 29, 44, 0.4) 100%);
   pointer-events: none;
 }
 
-.hero__media,
-.hero__image {
+.hero__sky,
+.hero__building {
   position: absolute;
   inset: 0;
-}
-
-.hero__media {
-  z-index: 0;
-}
-
-.hero__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hero__bg {
   opacity: 0;
   filter: blur(6px);
   transform: scale(1.02);
   transition: opacity 0.95s ease, filter 0.95s ease, transform 0.95s ease;
 }
 
-.hero--bg-visible .hero__bg,
-html.is-hero-intro-done .hero__bg,
-body.is-hero-done .hero__bg {
-  opacity: 1;
-  filter: blur(0);
-  transform: scale(1);
+.hero__sky {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__cloud {
+  position: absolute;
+  inset: auto;
+  z-index: 2;
+  top: 13vh;
+  left: 0;
+  width: 160%;
+  height: 27.2vh;
+  min-height: 14.1rem;
+  opacity: 0;
+  mix-blend-mode: screen;
+  animation: heroCloudDrift 20s linear infinite;
+  will-change: transform;
+  pointer-events: none;
+  display: flex;
+  filter: saturate(1.08) brightness(1.14);
+  transition: opacity 0.95s ease;
+}
+
+.hero__cloud::after {
+  content: "";
+  flex: 0 0 50%;
+  background: url("img/cloud.webp") center/cover no-repeat;
+}
+
+.hero__cloud--back {
+  z-index: 1;
+  top: 5vh;
+  left: 22vw;
+  width: 136%;
+  height: 20.8vh;
+  min-height: 11.2rem;
+  filter: saturate(1.02) brightness(1.08);
+}
+
+.hero__cloud--back img,
+.hero__cloud--back::after {
+  transform: rotate(180deg);
+  transform-origin: center;
+}
+
+.hero__cloud img {
+  flex: 0 0 50%;
+  width: 50%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero__building {
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
 }
 
 .hero__content {
-  position: relative;
-  z-index: 1;
-  max-width: 70rem;
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-content: center;
   text-align: center;
-  padding: 0 1rem;
+  padding: clamp(10rem, 12vw, 18rem) clamp(2rem, 6vw, 8rem);
   opacity: 0;
   transform: translateY(6px);
   transition: opacity 0.8s ease, transform 0.8s ease;
@@ -292,7 +334,7 @@ body.is-hero-done .hero__bg {
   letter-spacing: 0.3em;
   text-transform: uppercase;
   margin: 0 0 1.8rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .hero__tagline {
@@ -302,10 +344,34 @@ body.is-hero-done .hero__bg {
   margin: 0;
   line-height: 1.25;
   letter-spacing: 0.01em;
+  color: #ffffff;
 }
 
 .hero__tagline span {
   display: block;
+}
+
+.hero--bg-visible .hero__sky,
+.hero--bg-visible .hero__building,
+html.is-hero-intro-done .hero__sky,
+html.is-hero-intro-done .hero__building,
+body.is-hero-done .hero__sky,
+body.is-hero-done .hero__building {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+
+.hero--bg-visible .hero__cloud,
+html.is-hero-intro-done .hero__cloud,
+body.is-hero-done .hero__cloud {
+  opacity: 0.66;
+}
+
+.hero--bg-visible .hero__cloud--back,
+html.is-hero-intro-done .hero__cloud--back,
+body.is-hero-done .hero__cloud--back {
+  opacity: 0.42;
 }
 
 .hero--text-visible .hero__content,
@@ -313,6 +379,16 @@ html.is-hero-intro-done .hero__content,
 body.is-hero-done .hero__content {
   opacity: 1;
   transform: translateY(0);
+}
+
+@keyframes heroCloudDrift {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 /**************************************************
@@ -668,7 +744,7 @@ body.is-hero-done .hero__content {
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0) 0%,
-    #F6F8F4 100%
+    #E6F2E6 100%
   );
 }
 
@@ -681,6 +757,7 @@ body.is-hero-done .hero__content {
   position: relative;
   background-color: #E6F2E6;
   z-index: 2;
+  margin-top: -1px;
   padding: 2rem 0 4rem;
   overflow: visible;
   --wave-h: clamp(90px, 12vw, 180px);
@@ -695,18 +772,31 @@ body.is-hero-done .hero__content {
   height: var(--wave-h);
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  background-position: center;
   pointer-events: none;
   z-index: 1;
 }
 
 .services::before {
-  top: calc(var(--wave-h) * -1 + 1px);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 200' preserveAspectRatio='none'><path d='M0,150 C260,40 540,40 820,120 C1040,190 1220,200 1440,140 L1440,200 L0,200 Z' fill='%23E6F2E6'/></svg>");
+  top: -3px;
+  transform: translateY(calc(var(--wave-h) * -1));
+  /*
+   * 右肩上がりを強めたい場合:
+   * - 先頭の M0,154 の y 値を大きくする（左をさらに下げる）
+   * - 終端の 1440,48 の y 値を小さくする（右をさらに上げる）
+   */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220' preserveAspectRatio='none'><defs><linearGradient id='svTopG1' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23BEE4B9'/><stop offset='1' stop-color='%239ECF9A'/></linearGradient><linearGradient id='svTopG2' x1='0' y1='0.15' x2='1' y2='0.95'><stop offset='0' stop-color='%23CAEBC4'/><stop offset='1' stop-color='%23A6D3A0'/></linearGradient><linearGradient id='svTopG3' x1='0.15' y1='0.05' x2='0.95' y2='0.95'><stop offset='0' stop-color='%23D7F0D0'/><stop offset='1' stop-color='%239FCE99'/></linearGradient></defs><path d='M0,154 C210,218 470,198 700,132 C940,64 1160,24 1440,48 L1440,220 L0,220 Z' fill='url(%23svTopG1)' opacity='0.55'/><path d='M0,170 C240,210 510,188 760,124 C1010,58 1230,34 1440,58 L1440,220 L0,220 Z' fill='url(%23svTopG2)' opacity='0.40'/><path d='M0,138 C220,198 500,176 740,114 C980,54 1210,18 1440,40 L1440,220 L0,220 Z' fill='url(%23svTopG3)' opacity='0.30'/><path d='M0,160 C220,226 500,204 742,132 C994,58 1220,24 1440,46 L1440,220 L0,220 Z' fill='%23E6F2E6'/><rect x='0' y='216' width='1440' height='4' fill='%23E6F2E6'/></svg>");
 }
 
 .services::after {
-  bottom: calc(var(--wave-h) * -1 + 1px);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 200' preserveAspectRatio='none'><path d='M0,50 C240,160 520,160 800,90 C1020,20 1200,10 1440,60 L1440,0 L0,0 Z' fill='%23E6F2E6'/></svg>");
+  bottom: -3px;
+  transform: translateY(var(--wave-h));
+  /*
+   * 右肩上がりを弱めたい場合:
+   * - 先頭の M0,160 の y 値を小さくする（左を上げる）
+   * - 終端の 1440,44 の y 値を大きくする（右を下げる）
+   */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220' preserveAspectRatio='none'><defs><linearGradient id='svBottomG1' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23C3E6BE'/><stop offset='1' stop-color='%23A3D39D'/></linearGradient><linearGradient id='svBottomG2' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23D4F0CF'/><stop offset='1' stop-color='%23A9D6A3'/></linearGradient><linearGradient id='svBottomG3' x1='0.05' y1='0.1' x2='0.95' y2='0.95'><stop offset='0' stop-color='%23BFE2BA'/><stop offset='1' stop-color='%239ED09A'/></linearGradient></defs><path d='M0,154 C210,214 470,194 702,128 C954,58 1172,20 1440,44 L1440,0 L0,0 Z' fill='url(%23svBottomG1)' opacity='0.55'/><path d='M0,170 C250,206 522,184 770,120 C1020,58 1240,30 1440,50 L1440,0 L0,0 Z' fill='url(%23svBottomG2)' opacity='0.40'/><path d='M0,136 C232,194 508,174 744,112 C984,50 1220,18 1440,40 L1440,0 L0,0 Z' fill='url(%23svBottomG3)' opacity='0.28'/><path d='M0,160 C228,226 504,202 744,128 C988,54 1220,22 1440,46 L1440,0 L0,0 Z' fill='%23E6F2E6'/><rect x='0' y='0' width='1440' height='4' fill='%23E6F2E6'/></svg>");
 }
 
 .services__inner {
@@ -1679,13 +1769,38 @@ body.is-hero-done .hero__content {
 
   /* ヒーロー調整 */
   .hero {
-    min-height: 80vh;
-    padding: 10rem 1.6rem;
-    justify-content: center;
+    min-height: 48rem;
+    height: 72vh;
+  }
+
+  .hero__cloud {
+    top: 11vh;
+    height: 22.4vh;
+    min-height: 11.2rem;
+  }
+
+  .hero__cloud--back {
+    top: 4vh;
+    left: 18vw;
+    width: 160%;
+    height: 16.8vh;
+    min-height: 8.8rem;
+  }
+
+  .hero--bg-visible .hero__cloud,
+  html.is-hero-intro-done .hero__cloud,
+  body.is-hero-done .hero__cloud {
+    opacity: 0.54;
+  }
+
+  .hero--bg-visible .hero__cloud--back,
+  html.is-hero-intro-done .hero__cloud--back,
+  body.is-hero-done .hero__cloud--back {
+    opacity: 0.34;
   }
 
   .hero__content {
-    padding: 0;
+    padding: 10rem 1.6rem;
   }
 
   .hero__eyebrow {
@@ -1696,6 +1811,11 @@ body.is-hero-done .hero__content {
   .hero__tagline {
     font-size: 3rem;
     line-height: 1.35;
+  }
+
+  .hero__sky,
+  .hero__building {
+    object-position: center;
   }
 
   /* Copy セクション（キャッチコピー） */
@@ -1741,18 +1861,58 @@ body.is-hero-done .hero__content {
 
 }
 
+
+/**************************************************
+ * Scroll reveal motion
+ **************************************************/
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(2.4rem);
+  filter: blur(0.6rem);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    filter 0.9s ease var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.note-card.scroll-reveal {
+  transform: translateY(2.6rem) scale(0.985);
+}
+
+.note-card.scroll-reveal.is-visible {
+  transform: translateY(0) scale(1);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero__bg,
+  .hero__sky,
+  .hero__cloud,
+  .hero__building,
   .hero__content {
     transition: none !important;
+  }
+
+  .hero__cloud {
+    animation: none !important;
+    transform: none !important;
   }
 
   .service-card,
   .service-card__icon,
   .service-card__title::after,
   .pastblog-article,
-  .pastblog-article__link::after {
+  .pastblog-article__link::after,
+  .scroll-reveal {
     transition: none !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
   }
 
 }

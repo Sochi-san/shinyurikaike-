@@ -1,12 +1,14 @@
 /**************************************************
  * DOM 準備できたら全部初期化
  **************************************************/
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  document.body.classList.add("is-dom-ready");
   initBurgerMenu();
-  initNoteFeed();
+  await initNoteFeed();
   initHeaderReveal();
   initHeroIntro();
   initBreezeMotion();
+  initScrollReveal();
 });
 
 /**************************************************
@@ -258,4 +260,58 @@ function initBreezeMotion() {
   };
 
   requestAnimationFrame(tick);
+}
+
+/**************************************************
+ * スクロールフェードイン
+ **************************************************/
+function initScrollReveal() {
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const revealTargets = document.querySelectorAll(
+    [
+      ".copy__panel",
+      ".note__header",
+      ".note-card",
+      ".note__archive",
+      ".services__label",
+      ".services__lead",
+      ".service-card",
+      ".services__note",
+      ".button-primary",
+      ".branch-divider",
+      ".about__inner > *",
+      ".about__image-area",
+      ".info__map",
+      ".info__box"
+    ].join(",")
+  );
+
+  if (!revealTargets.length) return;
+
+  revealTargets.forEach((element, index) => {
+    element.classList.add("scroll-reveal");
+    element.style.setProperty("--reveal-delay", `${Math.min(index * 45, 380)}ms`);
+  });
+
+  if (prefersReduced.matches || !("IntersectionObserver" in window)) {
+    revealTargets.forEach((element) => element.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.14,
+      rootMargin: "0px 0px -8% 0px"
+    }
+  );
+
+  revealTargets.forEach((element) => observer.observe(element));
 }
