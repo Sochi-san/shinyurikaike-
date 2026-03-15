@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initHeaderReveal();
   initHeroIntro();
   initBreezeMotion();
+  initHeroBuildingParallax();
   initScrollReveal();
 });
 
@@ -99,8 +100,8 @@ function initHeroIntro() {
 
   document.body.classList.add("is-hero-animating");
 
-  const TEXT_DELAY = 120; // ms
-  const HOLD_DURATION = 1100;
+  const TEXT_DELAY = 620; // ms
+  const HOLD_DURATION = 2000;
   const BG_REVEAL_DURATION = 1000;
 
   requestAnimationFrame(() => {
@@ -122,6 +123,58 @@ function initHeroIntro() {
   });
 }
 
+
+/**************************************************
+ * Hero building subtle parallax
+ **************************************************/
+function initHeroBuildingParallax() {
+  const hero = document.querySelector(".hero");
+  const building = document.querySelector(".hero__building");
+
+  if (!hero || !building) return;
+
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const isMobile = window.matchMedia("(max-width: 768px)");
+
+  if (prefersReduced.matches) {
+    building.style.setProperty("--hero-building-shift", "0px");
+    return;
+  }
+
+  let rafId = null;
+
+  const update = () => {
+    rafId = null;
+
+    const rect = hero.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+    if (rect.bottom <= 0 || rect.top >= viewportHeight) {
+      building.style.setProperty("--hero-building-shift", "0px");
+      return;
+    }
+
+    const progress = rect.top / viewportHeight;
+    const clampedProgress = Math.max(-1, Math.min(1, progress));
+    const maxShift = isMobile.matches ? 24 : 36;
+    const shiftY = -clampedProgress * maxShift;
+
+    building.style.setProperty("--hero-building-shift", `${shiftY.toFixed(2)}px`);
+  };
+
+  const requestTick = () => {
+    if (rafId !== null) return;
+    rafId = requestAnimationFrame(update);
+  };
+
+  update();
+
+  window.addEventListener("scroll", requestTick, { passive: true });
+  window.addEventListener("resize", requestTick);
+
+  const introObserver = new MutationObserver(requestTick);
+  introObserver.observe(hero, { attributes: true, attributeFilter: ["class"] });
+}
 /**************************************************
  * note 最新3件取得＆描画
  *  - note-rss.php 経由で公式 note の RSS を取得する前提

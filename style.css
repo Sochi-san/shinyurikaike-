@@ -247,7 +247,6 @@ a {
   inset: 0;
   opacity: 0;
   filter: blur(6px);
-  transform: scale(1.02);
   transition: opacity 0.95s ease, filter 0.95s ease, transform 0.95s ease;
 }
 
@@ -256,6 +255,7 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: scale(1.02);
 }
 
 .hero__cloud {
@@ -264,12 +264,12 @@ a {
   z-index: 2;
   top: 13vh;
   left: 0;
-  width: 160%;
-  height: 27.2vh;
-  min-height: 14.1rem;
+  width: 200%;
+  height: 34vh;
+  min-height: 17.6rem;
   opacity: 0;
   mix-blend-mode: screen;
-  animation: heroCloudDrift 20s linear infinite;
+  animation: heroCloudDrift 25s linear infinite;
   will-change: transform;
   pointer-events: none;
   display: flex;
@@ -287,15 +287,15 @@ a {
   z-index: 1;
   top: 5vh;
   left: 22vw;
-  width: 136%;
-  height: 20.8vh;
-  min-height: 11.2rem;
+  width: 170%;
+  height: 26vh;
+  min-height: 14rem;
   filter: saturate(1.02) brightness(1.08);
 }
 
 .hero__cloud--back img,
 .hero__cloud--back::after {
-  transform: rotate(180deg);
+  transform: scaleY(-1);
   transform-origin: center;
 }
 
@@ -309,11 +309,14 @@ a {
 }
 
 .hero__building {
+  --hero-building-shift: 0px;
   z-index: 3;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center bottom;
+  transform: translate3d(0, var(--hero-building-shift), 0);
+  transform-origin: center bottom;
 }
 
 .hero__content {
@@ -326,7 +329,7 @@ a {
   padding: clamp(10rem, 12vw, 18rem) clamp(2rem, 6vw, 8rem);
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transition: opacity 1s ease, transform 1s ease;
 }
 
 .hero__eyebrow {
@@ -339,7 +342,8 @@ a {
 
 .hero__tagline {
   font-family: var(--font-en-script);
-  font-size: clamp(4rem, 6vw, 6.4rem);
+  font-size: clamp(3.2rem, 4.8vw, 5.4rem);
+  font-weight: 100;
   font-style: italic;
   margin: 0;
   line-height: 1.25;
@@ -352,14 +356,19 @@ a {
 }
 
 .hero--bg-visible .hero__sky,
-.hero--bg-visible .hero__building,
 html.is-hero-intro-done .hero__sky,
-html.is-hero-intro-done .hero__building,
-body.is-hero-done .hero__sky,
-body.is-hero-done .hero__building {
+body.is-hero-done .hero__sky {
   opacity: 1;
   filter: blur(0);
   transform: scale(1);
+}
+
+.hero--bg-visible .hero__building,
+html.is-hero-intro-done .hero__building,
+body.is-hero-done .hero__building {
+  opacity: 1;
+  filter: blur(0);
+
 }
 
 .hero--bg-visible .hero__cloud,
@@ -757,9 +766,12 @@ body.is-hero-done .hero__content {
   position: relative;
   background-color: #E6F2E6;
   z-index: 2;
-  margin-top: -1px;
+  margin-top: -2px;
   padding: 2rem 0 4rem;
   overflow: visible;
+  box-shadow:
+    0 -2px 0 #E6F2E6,
+    0 2px 0 #E6F2E6;
   --wave-h: clamp(90px, 12vw, 180px);
 }
 
@@ -778,8 +790,8 @@ body.is-hero-done .hero__content {
 }
 
 .services::before {
-  top: -3px;
-  transform: translateY(calc(var(--wave-h) * -1));
+  top: 0;
+  transform: translateY(calc(var(--wave-h) * -1 + 2px));
   /*
    * 右肩上がりを強めたい場合:
    * - 先頭の M0,154 の y 値を大きくする（左をさらに下げる）
@@ -789,8 +801,8 @@ body.is-hero-done .hero__content {
 }
 
 .services::after {
-  bottom: -3px;
-  transform: translateY(var(--wave-h));
+  bottom: 0;
+  transform: translateY(calc(var(--wave-h) - 2px));
   /*
    * 右肩上がりを弱めたい場合:
    * - 先頭の M0,160 の y 値を小さくする（左を上げる）
@@ -1775,16 +1787,15 @@ body.is-hero-done .hero__content {
 
   .hero__cloud {
     top: 11vh;
-    height: 22.4vh;
-    min-height: 11.2rem;
+    height: 40vh;
+    min-height: 20rem;
   }
 
   .hero__cloud--back {
     top: 4vh;
     left: 18vw;
-    width: 160%;
-    height: 16.8vh;
-    min-height: 8.8rem;
+    height: 32vh;
+    min-height: 16rem;
   }
 
   .hero--bg-visible .hero__cloud,
@@ -1816,6 +1827,12 @@ body.is-hero-done .hero__content {
   .hero__sky,
   .hero__building {
     object-position: center;
+  }
+
+  .hero--bg-visible .hero__building,
+  html.is-hero-intro-done .hero__building,
+  body.is-hero-done .hero__building {
+    --hero-building-scale: 1.01;
   }
 
   /* Copy セクション（キャッチコピー） */
@@ -1901,6 +1918,10 @@ body.is-hero-done .hero__content {
   .hero__cloud {
     animation: none !important;
     transform: none !important;
+  }
+
+  .hero__building {
+    --hero-building-shift: 0px !important;
   }
 
   .service-card,
