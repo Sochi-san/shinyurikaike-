@@ -32,12 +32,11 @@
       </div>
     </section>
 
-        <section id="year-2026" class="pastblog-archive" aria-labelledby="year-2026-title">
+        <section id="year-2026" class="pastblog-archive" aria-labelledby="year-2026-title" data-horizontal="true">
       <div class="pastblog-archive__head">
         <h2 id="year-2026-title">2026</h2>
-        <p class="pastblog-archive__meta">WordPress（バックナンバー）</p>
       </div>
-      <div class="pastblog-articles">
+      <div class="pastblog-articles pastblog-articles--horizontal" aria-label="2025年の記事一覧（横スクロール）">
         <article class="pastblog-article">
           <span class="pastblog-article__tag">過去ブログ</span>
           <p class="pastblog-article__date">2026年3月15日</p>
@@ -76,12 +75,11 @@
       </div>
     </section>
 
-    <section id="year-2025" class="pastblog-archive" aria-labelledby="year-2025-title">
+    <section id="year-2025" class="pastblog-archive" aria-labelledby="year-2025-title" data-horizontal="true">
       <div class="pastblog-archive__head">
         <h2 id="year-2025-title">2025</h2>
-        <p class="pastblog-archive__meta">WordPress（バックナンバー）</p>
       </div>
-      <div class="pastblog-articles">
+      <div class="pastblog-articles" aria-label="2025年の記事一覧（横スクロール）">
         <article class="pastblog-article">
           <span class="pastblog-article__tag">過去ブログ</span>
           <p class="pastblog-article__date">2025年12月25日</p>
@@ -335,12 +333,11 @@
       </div>
     </section>
 
-    <section id="year-2024" class="pastblog-archive" aria-labelledby="year-2024-title">
+    <section id="year-2024" class="pastblog-archive" aria-labelledby="year-2024-title" data-horizontal="true">
       <div class="pastblog-archive__head">
         <h2 id="year-2024-title">2024</h2>
-        <p class="pastblog-archive__meta">WordPress（バックナンバー）</p>
       </div>
-      <div class="pastblog-articles">
+      <div class="pastblog-articles" aria-label="2024年の記事一覧（横スクロール）">
         <article class="pastblog-article">
           <span class="pastblog-article__tag">過去ブログ</span>
           <p class="pastblog-article__date">2024年12月16日</p>
@@ -568,12 +565,11 @@
       </div>
     </section>
 
-    <section id="year-2023" class="pastblog-archive" aria-labelledby="year-2023-title">
+    <section id="year-2023" class="pastblog-archive" aria-labelledby="year-2023-title" data-horizontal="true">
       <div class="pastblog-archive__head">
         <h2 id="year-2023-title">2023</h2>
-        <p class="pastblog-archive__meta">WordPress（バックナンバー）</p>
       </div>
-      <div class="pastblog-articles">
+      <div class="pastblog-articles" aria-label="2023年の記事一覧（横スクロール）">
         <article class="pastblog-article">
           <span class="pastblog-article__tag">過去ブログ</span>
           <p class="pastblog-article__date">2023年12月15日</p>
@@ -753,12 +749,11 @@
       </div>
     </section>
 
-    <section id="year-2022" class="pastblog-archive" aria-labelledby="year-2022-title">
+    <section id="year-2022" class="pastblog-archive" aria-labelledby="year-2022-title" data-horizontal="true">
       <div class="pastblog-archive__head">
         <h2 id="year-2022-title">2022</h2>
-        <p class="pastblog-archive__meta">WordPress（バックナンバー）</p>
       </div>
-      <div class="pastblog-articles">
+      <div class="pastblog-articles" aria-label="2022年の記事一覧（横スクロール）">
         <article class="pastblog-article">
           <span class="pastblog-article__tag">過去ブログ</span>
           <p class="pastblog-article__date">2022年12月27日</p>
@@ -1037,6 +1032,131 @@
       <a class="pastblog-cta__link" href="shinyuri-accg.html">トップに戻る<span aria-hidden="true">→</span></a>
     </section>
   </main>
+
+  <div class="pastblog-modal" id="pastblogModal" aria-hidden="true">
+    <div class="pastblog-modal__overlay" data-modal-close></div>
+    <article class="pastblog-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="pastblogModalTitle" tabindex="-1">
+      <button class="pastblog-modal__close" type="button" aria-label="閉じる" data-modal-close>×</button>
+      <p class="pastblog-modal__date" id="pastblogModalDate"></p>
+      <h2 class="pastblog-modal__title" id="pastblogModalTitle"></h2>
+      <div class="pastblog-modal__body" id="pastblogModalBody"></div>
+    </article>
+  </div>
+
+  <script>
+    (() => {
+      const modal = document.getElementById('pastblogModal');
+      if (!modal) return;
+
+      const dialog = modal.querySelector('.pastblog-modal__dialog');
+      const modalDate = document.getElementById('pastblogModalDate');
+      const modalTitle = document.getElementById('pastblogModalTitle');
+      const modalBody = document.getElementById('pastblogModalBody');
+      const articleStore = {};
+      let lastFocused = null;
+
+      const normalizeText = (text) => (text || '').replace(/\s+/g, ' ').trim();
+
+      const createExcerpt = (text, maxLength = 110) => {
+        const plain = normalizeText(text);
+        if (plain.length <= maxLength) return plain;
+        return `${plain.slice(0, maxLength).trimEnd()}…`;
+      };
+
+      const escapeHtml = (text) =>
+        text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+
+      const archives = document.querySelectorAll('.pastblog-archive[data-horizontal="true"]');
+      archives.forEach((archive) => {
+        const year = archive.id.replace('year-', '');
+        const list = archive.querySelector('.pastblog-articles');
+        if (!list) return;
+
+        const sourceArticles = Array.from(list.querySelectorAll('.pastblog-article'));
+        const articles = sourceArticles.map((article) => {
+          const tag = normalizeText(article.querySelector('.pastblog-article__tag')?.textContent || '過去ブログ');
+          const date = normalizeText(article.querySelector('.pastblog-article__date')?.textContent || '');
+          const title = normalizeText(article.querySelector('.pastblog-article__title')?.textContent || '');
+          const bodyHtml = article.querySelector('.pastblog-article__body')?.innerHTML?.trim() || '';
+          const bodyText = normalizeText(article.querySelector('.pastblog-article__body')?.textContent || '');
+
+          return {
+            tag,
+            date,
+            title,
+            bodyHtml,
+            excerpt: createExcerpt(bodyText, 110)
+          };
+        });
+
+        articleStore[year] = articles;
+
+        list.classList.add('pastblog-articles--horizontal');
+        list.innerHTML = articles
+          .map((item, index) => `
+            <article class="pastblog-article pastblog-article--thumbnail">
+              <button class="pastblog-article__trigger" type="button" data-year="${year}" data-index="${index}" aria-label="${escapeHtml(item.title)} を全文表示">
+                <span class="pastblog-article__tag">${escapeHtml(item.tag)}</span>
+                <p class="pastblog-article__date">${escapeHtml(item.date)}</p>
+                <h3 class="pastblog-article__title">${escapeHtml(item.title)}</h3>
+                <p class="pastblog-article__excerpt">${escapeHtml(item.excerpt)}</p>
+                <span class="pastblog-article__more" aria-hidden="true">詳細を見る</span>
+              </button>
+            </article>
+          `)
+          .join('');
+      });
+
+      const openModal = (year, index, trigger) => {
+        const article = articleStore[year]?.[index];
+        if (!article) return;
+
+        lastFocused = trigger;
+        modalDate.textContent = article.date;
+        modalTitle.textContent = article.title;
+        modalBody.innerHTML = article.bodyHtml;
+
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('is-modal-open');
+        dialog.focus();
+      };
+
+      const closeModal = () => {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('is-modal-open');
+
+        if (lastFocused && typeof lastFocused.focus === 'function') {
+          lastFocused.focus();
+        }
+      };
+
+      document.addEventListener('click', (event) => {
+        const trigger = event.target.closest('.pastblog-article__trigger');
+        if (trigger) {
+          openModal(trigger.dataset.year, Number(trigger.dataset.index), trigger);
+          return;
+        }
+
+        if (event.target.matches('[data-modal-close]')) {
+          closeModal();
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal.classList.contains('is-open')) {
+          closeModal();
+        }
+      });
+
+    })();
+  </script>
 
   <footer class="pastblog-footer">
     <p>© しんゆり会計 ｜ 岡野直純税理士事務所</p>

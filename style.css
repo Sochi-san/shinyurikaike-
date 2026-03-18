@@ -7,6 +7,10 @@ html {
   font-size: 62.5%;
 }
 
+body.is-menu-open {
+  overflow: hidden;
+}
+
 :root {
   /* Colors */
   --color-text-main: #093725;
@@ -1180,6 +1184,182 @@ body.is-hero-done .hero__content {
   transform: scaleX(1);
 }
 
+.pastblog-articles--horizontal {
+  display: flex;
+  gap: 1.8rem;
+  overflow-x: auto;
+  padding: 0.4rem 0.2rem 1rem;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15, 74, 54, 0.28) transparent;
+}
+
+.pastblog-articles--horizontal::-webkit-scrollbar {
+  height: 0.6rem;
+}
+
+.pastblog-articles--horizontal::-webkit-scrollbar-thumb {
+  background: rgba(15, 74, 54, 0.24);
+  border-radius: 999px;
+}
+
+.pastblog-articles--horizontal .pastblog-article {
+  flex: 0 0 clamp(24rem, 28vw, 31rem);
+  margin: 0;
+  padding: 0;
+  min-height: 24.8rem;
+  max-height: 24.8rem;
+  border-radius: 1.8rem;
+  border: 0.1rem solid rgba(15, 74, 54, 0.08);
+  background: #ffffff;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.05);
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+
+.pastblog-articles--horizontal .pastblog-article:hover,
+.pastblog-articles--horizontal .pastblog-article:focus-within {
+  transform: none;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.05);
+}
+
+.pastblog-article--thumbnail .pastblog-article__trigger {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.pastblog-article--thumbnail .pastblog-article__trigger:hover,
+.pastblog-article--thumbnail .pastblog-article__trigger:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 1.6rem 2.6rem rgba(0, 0, 0, 0.08);
+}
+
+.pastblog-article--thumbnail .pastblog-article__trigger:focus-visible {
+  outline: 0.2rem solid rgba(15, 74, 54, 0.35);
+  outline-offset: -0.2rem;
+}
+
+.pastblog-article--thumbnail .pastblog-article__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 5.6rem;
+  font-size: 1.8rem;
+}
+
+.pastblog-article--thumbnail .pastblog-article__excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+  color: #405048;
+  line-height: 1.7;
+  min-height: 7.2rem;
+}
+
+.pastblog-article__more {
+  margin-top: auto;
+  color: #0f4a36;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.is-modal-open {
+  overflow: hidden;
+}
+
+.pastblog-modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.6rem, 4vw, 3.2rem);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  z-index: 1200;
+}
+
+.pastblog-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.pastblog-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.pastblog-modal__dialog {
+  position: relative;
+  width: min(72rem, 100%);
+  max-height: min(84vh, 78rem);
+  overflow-y: auto;
+  background: #fdfdfb;
+  border-radius: 1.8rem;
+  border: 0.1rem solid rgba(15, 74, 54, 0.14);
+  box-shadow: 0 2.2rem 4rem rgba(20, 35, 28, 0.18);
+  padding: clamp(2.4rem, 4vw, 3.2rem);
+}
+
+.pastblog-modal__close {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.4rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(15, 74, 54, 0.08);
+  color: #0f4a36;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pastblog-modal__date {
+  margin: 0 0 0.4rem;
+  color: #5a6a60;
+  font-size: 1.3rem;
+  letter-spacing: 0.04em;
+}
+
+.pastblog-modal__title {
+  margin: 0;
+  padding-right: 3.8rem;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  line-height: 1.45;
+}
+
+.pastblog-modal__body {
+  margin-top: 1.6rem;
+  color: #33433b;
+  line-height: 1.85;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.pastblog-modal__body p {
+  margin: 0;
+}
+
 .pastblog-cta {
   max-width: 60rem;
   margin: clamp(4rem, 8vw, 6rem) auto 0;
@@ -1888,6 +2068,20 @@ body.is-hero-done .hero__content {
 
   .pastblog-article {
     padding: 2rem 1.6rem;
+  }
+
+  .pastblog-articles--horizontal {
+    gap: 1.2rem;
+    padding-bottom: 1rem;
+  }
+
+  .pastblog-articles--horizontal .pastblog-article {
+    flex-basis: min(86vw, 28rem);
+  }
+
+  .pastblog-modal__dialog {
+    max-height: 88vh;
+    border-radius: 1.4rem;
   }
 
   .pastblog-cta {
